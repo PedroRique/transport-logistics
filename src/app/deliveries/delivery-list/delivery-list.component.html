@@ -1,1 +1,65 @@
-<p>delivery-list works!</p>
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Motorista</mat-label>
+    <mat-select [(value)]="selectedDriver" (selectionChange)="applyFilter()">
+      <mat-option *ngFor="let driver of drivers" [value]="driver">{{
+        driver
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Status</mat-label>
+    <mat-select [(value)]="selectedStatus" (selectionChange)="applyFilter()">
+      <mat-option *ngFor="let status of statuses" [value]="status">{{
+        status
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<mat-table [dataSource]="filteredDeliveries" class="mat-elevation-z8">
+  <!-- Define as colunas da tabela aqui -->
+  <ng-container matColumnDef="documento">
+    <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.documento }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="motorista">
+    <mat-header-cell *matHeaderCellDef> Motorista </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.motorista.nome }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="cliente_origem">
+    <mat-header-cell *matHeaderCellDef> Cliente Origem </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.cliente_origem.nome }} - {{ element.cliente_origem.bairro }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="cliente_destino">
+    <mat-header-cell *matHeaderCellDef> Cliente Destino </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.cliente_destino.nome }} - {{ element.cliente_destino.bairro }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="status_entrega">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.status_entrega }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<mat-paginator
+  [length]="filteredDeliveries.data.length"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="pageEvent = $event"
+></mat-paginator>
