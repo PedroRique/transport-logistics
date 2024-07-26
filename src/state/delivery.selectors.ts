@@ -15,50 +15,56 @@ export const selectAllDeliveries = createSelector(
   (state: DeliveryState) => state.deliveries
 );
 
+const createDeliveryMap = <T>(
+  deliveries: Delivery[],
+  keyFn: (delivery: Delivery) => string,
+  initValue: T,
+  updateFn: (acc: T, delivery: Delivery) => void
+): { [key: string]: T } => {
+  return deliveries.reduce((acc, delivery) => {
+    const key = keyFn(delivery);
+    if (!acc[key]) {
+      acc[key] = { ...initValue };
+    }
+    updateFn(acc[key], delivery);
+    return acc;
+  }, {} as { [key: string]: T });
+};
+
 export const selectFailedDeliveries = createSelector(
   selectAllDeliveries,
   (deliveries: Delivery[]) => {
-    const driverMap: { [key: string]: number } = {};
-
-    deliveries.forEach((delivery) => {
-      const driverName = delivery.motorista.nome;
-      if (delivery.status_entrega === 'INSUCESSO') {
-        if (!driverMap[driverName]) {
-          driverMap[driverName] = 0;
+    const driverMap = createDeliveryMap(
+      deliveries,
+      (delivery) => delivery.motorista.nome,
+      { nome: '', entregasInsucesso: 0 } as FailedDelivery,
+      (acc, delivery) => {
+        acc.nome = delivery.motorista.nome;
+        if (delivery.status_entrega === 'INSUCESSO') {
+          acc.entregasInsucesso++;
         }
-        driverMap[driverName]++;
       }
-    });
+    );
 
-    return Object.keys(driverMap).map((key) => ({
-      nome: key,
-      entregasInsucesso: driverMap[key],
-    })) as FailedDelivery[];
+    return Object.values(driverMap);
   }
 );
 
 export const selectDeliveriesByDriver = createSelector(
   selectAllDeliveries,
   (deliveries: Delivery[]) => {
-    const deliveriesByDriver: { [key: string]: DeliveryByDriver } =
-      deliveries.reduce((acc, delivery) => {
-        const nome = delivery.motorista.nome;
-
-        if (!acc[nome]) {
-          acc[nome] = {
-            nome: nome,
-            totalEntregas: 0,
-            entregasRealizadas: 0,
-          };
-        }
-
-        acc[nome].totalEntregas++;
+    const deliveriesByDriver = createDeliveryMap(
+      deliveries,
+      (delivery) => delivery.motorista.nome,
+      { nome: '', totalEntregas: 0, entregasRealizadas: 0 } as DeliveryByDriver,
+      (acc, delivery) => {
+        acc.nome = delivery.motorista.nome;
+        acc.totalEntregas++;
         if (delivery.status_entrega === 'ENTREGUE') {
-          acc[nome].entregasRealizadas++;
+          acc.entregasRealizadas++;
         }
-
-        return acc;
-      }, {} as { [key: string]: DeliveryByDriver });
+      }
+    );
 
     return Object.values(deliveriesByDriver);
   }
@@ -67,25 +73,22 @@ export const selectDeliveriesByDriver = createSelector(
 export const selectDeliveriesByDistrict = createSelector(
   selectAllDeliveries,
   (deliveries: Delivery[]) => {
-    const deliveriesByDistrict: { [key: string]: DeliveryByDistrict } =
-      deliveries.reduce((acc, delivery) => {
-        const bairro = delivery.cliente_destino.bairro;
-
-        if (!acc[bairro]) {
-          acc[bairro] = {
-            bairro: bairro,
-            totalEntregas: 0,
-            entregasRealizadas: 0,
-          };
-        }
-
-        acc[bairro].totalEntregas++;
+    const deliveriesByDistrict = createDeliveryMap(
+      deliveries,
+      (delivery) => delivery.cliente_destino.bairro,
+      {
+        bairro: '',
+        totalEntregas: 0,
+        entregasRealizadas: 0,
+      } as DeliveryByDistrict,
+      (acc, delivery) => {
+        acc.bairro = delivery.cliente_destino.bairro;
+        acc.totalEntregas++;
         if (delivery.status_entrega === 'ENTREGUE') {
-          acc[bairro].entregasRealizadas++;
+          acc.entregasRealizadas++;
         }
-
-        return acc;
-      }, {} as { [key: string]: DeliveryByDistrict });
+      }
+    );
 
     return Object.values(deliveriesByDistrict);
   }
