@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { DeliveryService } from '../../services/delivery.service';
-import { Delivery } from '../../models/delivery.model';
 import { MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { DeliveryState } from '../../../state/delivery.reducer';
+import { selectFailedDeliveries } from '../../../state/delivery.selectors';
+import { Delivery, FailedDelivery } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-failed-deliveries',
@@ -12,34 +14,14 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class FailedDeliveriesComponent {
   deliveries: Delivery[] = [];
-  unsuccessfulDeliveries: { nome: string; entregasInsucesso: number }[] = [];
+  unsuccessfulDeliveries: FailedDelivery[] = [];
   displayedColumns: string[] = ['nome', 'entregasInsucesso'];
 
-  constructor(private deliveryService: DeliveryService) {}
+  constructor(private store: Store<DeliveryState>) {}
 
   ngOnInit(): void {
-    this.deliveryService.getDeliveries().subscribe((data) => {
-      this.deliveries = data;
-      this.processUnsuccessfulDeliveries();
+    this.store.select(selectFailedDeliveries).subscribe((data) => {
+      this.unsuccessfulDeliveries = data;
     });
-  }
-
-  processUnsuccessfulDeliveries(): void {
-    const driverMap: { [key: string]: number } = {};
-
-    this.deliveries.forEach((delivery) => {
-      const driverName = delivery.motorista.nome;
-      if (delivery.status_entrega === 'INSUCESSO') {
-        if (!driverMap[driverName]) {
-          driverMap[driverName] = 0;
-        }
-        driverMap[driverName]++;
-      }
-    });
-
-    this.unsuccessfulDeliveries = Object.keys(driverMap).map((key) => ({
-      nome: key,
-      entregasInsucesso: driverMap[key],
-    }));
   }
 }

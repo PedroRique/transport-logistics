@@ -17,3 +17,20 @@ export interface Cliente {
   bairro: string;
   cidade: string;
 }
+
+export interface DeliveryByDistrict {
+  bairro: string;
+  totalEntregas: number;
+  entregasRealizadas: number;
+}
+
+export interface DeliveryByDriver {
+  nome: string;
+  totalEntregas: number;
+  entregasRealizadas: number;
+}
+
+export interface FailedDelivery {
+  nome: string;
+  entregasInsucesso: number;
+}

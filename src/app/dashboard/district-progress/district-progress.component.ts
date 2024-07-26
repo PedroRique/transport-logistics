@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { DeliveryService } from '../../services/delivery.service';
-import { Delivery } from '../../models/delivery.model';
 import { MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { DeliveryState } from '../../../state/delivery.reducer';
+import { selectDeliveriesByDistrict } from '../../../state/delivery.selectors';
+import { Delivery, DeliveryByDistrict } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-district-progress',
@@ -12,46 +14,18 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class DistrictProgressComponent {
   deliveries: Delivery[] = [];
-  districtStats: {
-    bairro: string;
-    totalEntregas: number;
-    entregasRealizadas: number;
-  }[] = [];
+  districtStats: DeliveryByDistrict[] = [];
   displayedColumns: string[] = [
     'bairro',
     'totalEntregas',
     'entregasRealizadas',
   ];
 
-  constructor(private deliveryService: DeliveryService) {}
+  constructor(private store: Store<DeliveryState>) {}
 
   ngOnInit(): void {
-    this.deliveryService.getDeliveries().subscribe((data) => {
-      this.deliveries = data;
-      this.processDistrictStats();
+    this.store.select(selectDeliveriesByDistrict).subscribe((data) => {
+      this.districtStats = data;
     });
-  }
-
-  processDistrictStats(): void {
-    const districtMap: {
-      [key: string]: { totalEntregas: number; entregasRealizadas: number };
-    } = {};
-
-    this.deliveries.forEach((delivery) => {
-      const districtName = delivery.cliente_destino.bairro;
-      if (!districtMap[districtName]) {
-        districtMap[districtName] = { totalEntregas: 0, entregasRealizadas: 0 };
-      }
-      districtMap[districtName].totalEntregas++;
-      if (delivery.status_entrega === 'ENTREGUE') {
-        districtMap[districtName].entregasRealizadas++;
-      }
-    });
-
-    this.districtStats = Object.keys(districtMap).map((key) => ({
-      bairro: key,
-      totalEntregas: districtMap[key].totalEntregas,
-      entregasRealizadas: districtMap[key].entregasRealizadas,
-    }));
   }
 }

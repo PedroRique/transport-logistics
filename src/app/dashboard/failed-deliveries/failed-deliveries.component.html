@@ -1,13 +1,11 @@
 <div>
   <h2>Entregas com Insucesso por Motorista</h2>
   <mat-table [dataSource]="unsuccessfulDeliveries" class="mat-elevation-z8">
-    <!-- Nome do Motorista -->
     <ng-container matColumnDef="nome">
       <mat-header-cell *matHeaderCellDef> Motorista </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
     </ng-container>
 
-    <!-- Quantidade de Entregas com Insucesso -->
     <ng-container matColumnDef="entregasInsucesso">
       <mat-header-cell *matHeaderCellDef> Entregas com Insucesso </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.entregasInsucesso}} </mat-cell>

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { loadDeliveries } from '../state/delivery.actions';
+import { DeliveryState } from '../state/delivery.reducer';
 import { HeaderComponent } from './header/header.component';
-import { DeliveryService } from './services/delivery.service';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +14,10 @@ import { DeliveryService } from './services/delivery.service';
 })
 export class AppComponent {
   title = 'transport-logistics';
+
+  constructor(private store: Store<DeliveryState>) {}
+
+  ngOnInit() {
+    this.store.dispatch(loadDeliveries());
+  }
 }

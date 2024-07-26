@@ -1,12 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { DeliveryService } from '../../services/delivery.service';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
-import { Delivery } from '../../models/delivery.model';
+import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { DeliveryState } from '../../../state/delivery.reducer';
+import { selectAllDeliveries } from '../../../state/delivery.selectors';
+import { Delivery } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-delivery-list',
@@ -17,7 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatPaginatorModule,
     CommonModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './delivery-list.component.html',
   styleUrl: './delivery-list.component.scss',
@@ -37,14 +39,12 @@ export class DeliveryListComponent {
     'status_entrega',
   ];
 
-  pageEvent?: PageEvent;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private deliveryService: DeliveryService) {}
+  constructor(private store: Store<DeliveryState>) {}
 
   ngOnInit(): void {
-    this.deliveryService.getDeliveries().subscribe((data) => {
+    this.store.select(selectAllDeliveries).subscribe((data) => {
       this.deliveries = data;
       this.filteredDeliveries.data = this.deliveries;
       this.filteredDeliveries.paginator = this.paginator;

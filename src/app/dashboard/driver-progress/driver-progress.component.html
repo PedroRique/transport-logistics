@@ -1,20 +1,16 @@
-<!-- dashboard/dashboard.component.html -->
 <div>
   <h2>Andamento das Entregas por Motorista</h2>
   <mat-table [dataSource]="driverStats" class="mat-elevation-z8">
-    <!-- Nome do Motorista -->
     <ng-container matColumnDef="nome">
       <mat-header-cell *matHeaderCellDef> Motorista </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
     </ng-container>
 
-    <!-- Quantidade Total de Entregas -->
     <ng-container matColumnDef="totalEntregas">
       <mat-header-cell *matHeaderCellDef> Entregas Totais </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.totalEntregas}} </mat-cell>
     </ng-container>
 
-    <!-- Entregas Realizadas -->
     <ng-container matColumnDef="entregasRealizadas">
       <mat-header-cell *matHeaderCellDef> Entregas Realizadas </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.entregasRealizadas}} </mat-cell>
