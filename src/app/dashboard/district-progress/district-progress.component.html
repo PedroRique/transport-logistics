@@ -1,1 +1,25 @@
-<p>district-progress works!</p>
+<div>
+  <h2>Andamento das Entregas por Bairro</h2>
+  <mat-table [dataSource]="districtStats" class="mat-elevation-z8">
+    <!-- Bairro -->
+    <ng-container matColumnDef="bairro">
+      <mat-header-cell *matHeaderCellDef> Bairro </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.bairro}} </mat-cell>
+    </ng-container>
+
+    <!-- Quantidade Total de Entregas -->
+    <ng-container matColumnDef="totalEntregas">
+      <mat-header-cell *matHeaderCellDef> Entregas Totais </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.totalEntregas}} </mat-cell>
+    </ng-container>
+
+    <!-- Entregas Realizadas -->
+    <ng-container matColumnDef="entregasRealizadas">
+      <mat-header-cell *matHeaderCellDef> Entregas Realizadas </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.entregasRealizadas}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
