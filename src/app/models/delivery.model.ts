@@ -1,10 +1,16 @@
+export enum DeliveryStatus {
+  ENTREGUE = 'ENTREGUE',
+  PENDENTE = 'PENDENTE',
+  INSUCESSO = 'INSUCESSO',
+}
+
 export interface Delivery {
   id: string;
   documento: string;
   motorista: Motorista;
   cliente_origem: Cliente;
   cliente_destino: Cliente;
-  status_entrega: string;
+  status_entrega: DeliveryStatus;
 }
 
 export interface Motorista {

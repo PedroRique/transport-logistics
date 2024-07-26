@@ -8,6 +8,7 @@ import {
   Delivery,
   DeliveryByDistrict,
   DeliveryByDriver,
+  DeliveryStatus,
   FailedDelivery,
 } from '../app/models/delivery.model';
 
@@ -47,7 +48,7 @@ function processFailedDeliveries(deliveries: Delivery[]): FailedDelivery[] {
     { nome: '', entregasInsucesso: 0 } as FailedDelivery,
     (acc, delivery) => {
       acc.nome = delivery.motorista.nome;
-      if (delivery.status_entrega === 'INSUCESSO') {
+      if (delivery.status_entrega === DeliveryStatus.INSUCESSO) {
         acc.entregasInsucesso++;
       }
     }
@@ -64,7 +65,7 @@ function processDeliveriesByDriver(deliveries: Delivery[]): DeliveryByDriver[] {
     (acc, delivery) => {
       acc.nome = delivery.motorista.nome;
       acc.totalEntregas++;
-      if (delivery.status_entrega === 'ENTREGUE') {
+      if (delivery.status_entrega === DeliveryStatus.ENTREGUE) {
         acc.entregasRealizadas++;
       }
     }
@@ -87,7 +88,7 @@ function processDeliveriesByDistrict(
     (acc, delivery) => {
       acc.bairro = delivery.cliente_destino.bairro;
       acc.totalEntregas++;
-      if (delivery.status_entrega === 'ENTREGUE') {
+      if (delivery.status_entrega === DeliveryStatus.ENTREGUE) {
         acc.entregasRealizadas++;
       }
     }

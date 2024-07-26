@@ -8,7 +8,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { DeliveryState } from '../../../state/delivery.reducer';
 import { selectAllDeliveries } from '../../../state/delivery.selectors';
-import { Delivery } from '../../models/delivery.model';
+import { Delivery, DeliveryStatus } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-delivery-list',
@@ -30,7 +30,11 @@ export class DeliveryListComponent {
   selectedDriver: string = '';
   selectedStatus: string = '';
   drivers: string[] = [];
-  statuses: string[] = ['ENTREGUE', 'INSUCESSO']; // Ajustar para os status corretos
+  statuses: string[] = [
+    DeliveryStatus.ENTREGUE,
+    DeliveryStatus.PENDENTE,
+    DeliveryStatus.INSUCESSO,
+  ];
   displayedColumns: string[] = [
     'documento',
     'motorista',
