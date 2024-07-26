@@ -1,56 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatButtonModule } from '@angular/material/button';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { CommonModule } from '@angular/common';
-import { DeliveryListComponent } from './delivery-list.component';
-import { selectAllDeliveries } from '../../../state/delivery.selectors';
-import { DeliveryState } from '../../../state/delivery.reducer';
-import { Delivery, DeliveryStatus } from '../../models/delivery.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
-const MOCK_DELIVERIES: Delivery[] = [
-  {
-    id: '1',
-    documento: '01021',
-    motorista: { nome: 'Carlos Pereira' },
-    cliente_origem: {
-      nome: 'Empresa ABC',
-      endereco: 'Rua dos Pinheiros, 789',
-      bairro: 'Jardins',
-      cidade: 'São Paulo',
-    },
-    cliente_destino: {
-      nome: 'Ana Clara',
-      endereco: 'Rua Vergueiro, 1234',
-      bairro: 'Liberdade',
-      cidade: 'São Paulo',
-    },
-    status_entrega: DeliveryStatus.ENTREGUE,
-  },
-  {
-    id: '2',
-    documento: '01022',
-    motorista: { nome: 'João Silva' },
-    cliente_origem: {
-      nome: 'Empresa XYZ',
-      endereco: 'Avenida Paulista, 1000',
-      bairro: 'Bela Vista',
-      cidade: 'São Paulo',
-    },
-    cliente_destino: {
-      nome: 'Pedro Santos',
-      endereco: 'Rua Augusta, 1500',
-      bairro: 'Consolação',
-      cidade: 'São Paulo',
-    },
-    status_entrega: DeliveryStatus.PENDENTE,
-  },
-];
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { DeliveryState } from '../../../state/delivery.reducer';
+import { selectAllDeliveries } from '../../../state/delivery.selectors';
+import { DeliveryStatus } from '../../models/delivery.model';
+import { MOCK_DELIVERIES } from '../../services/mocks';
+import { DeliveryListComponent } from './delivery-list.component';
 
 describe('DeliveryListComponent', () => {
   let component: DeliveryListComponent;
