@@ -12,10 +12,4 @@ import { DeliveryService } from './services/delivery.service';
 })
 export class AppComponent {
   title = 'transport-logistics';
-
-  constructor(private deliveryService: DeliveryService) {
-    this.deliveryService.getDeliveries().subscribe((data) => {
-      console.log(data);
-    });
-  }
 }

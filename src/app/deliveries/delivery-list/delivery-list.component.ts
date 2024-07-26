@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DeliveryService } from '../../services/delivery.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { Delivery } from '../../models/delivery.model';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-delivery-list',
@@ -16,6 +17,7 @@ import { Delivery } from '../../models/delivery.model';
     MatTableModule,
     MatPaginatorModule,
     CommonModule,
+    MatButtonModule
   ],
   templateUrl: './delivery-list.component.html',
   styleUrl: './delivery-list.component.scss',
@@ -37,12 +39,15 @@ export class DeliveryListComponent {
 
   pageEvent?: PageEvent;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(private deliveryService: DeliveryService) {}
 
   ngOnInit(): void {
     this.deliveryService.getDeliveries().subscribe((data) => {
       this.deliveries = data;
       this.filteredDeliveries.data = this.deliveries;
+      this.filteredDeliveries.paginator = this.paginator;
       this.drivers = [...new Set(data.map((d) => d.motorista.nome))];
     });
   }
@@ -60,5 +65,11 @@ export class DeliveryListComponent {
       );
     }
     this.filteredDeliveries.data = filteredData;
+  }
+
+  clearFilters() {
+    this.selectedDriver = '';
+    this.selectedStatus = '';
+    this.applyFilter();
   }
 }

@@ -1,5 +1,5 @@
-<div>
-  <mat-form-field appearance="fill">
+<div class="filters-container">
+  <mat-form-field  subscriptSizing="dynamic"  appearance="fill">
     <mat-label>Motorista</mat-label>
     <mat-select [(value)]="selectedDriver" (selectionChange)="applyFilter()">
       <mat-option *ngFor="let driver of drivers" [value]="driver">{{
@@ -8,7 +8,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field  subscriptSizing="dynamic"  appearance="fill">
     <mat-label>Status</mat-label>
     <mat-select [(value)]="selectedStatus" (selectionChange)="applyFilter()">
       <mat-option *ngFor="let status of statuses" [value]="status">{{
@@ -16,6 +16,8 @@
       }}</mat-option>
     </mat-select>
   </mat-form-field>
+
+  <button mat-button (click)="clearFilters()">Limpar Filtros</button>
 </div>
 
 <mat-table [dataSource]="filteredDeliveries" class="mat-elevation-z8">
