@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeliveryListComponent } from './delivery-list.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 describe('DeliveryListComponent', () => {
   let component: DeliveryListComponent;
@@ -8,9 +10,9 @@ describe('DeliveryListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeliveryListComponent]
-    })
-    .compileComponents();
+      imports: [DeliveryListComponent],
+      providers: [provideMockStore(), provideAnimationsAsync()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DeliveryListComponent);
     component = fixture.componentInstance;
